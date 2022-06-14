@@ -2,18 +2,12 @@
   <dir>
     <v-container>
       <v-alert
-        icon="mdi-shield-lock-outline"
-        prominent
         text
         type="info"
         class="mt-5"
       >
         <v-row align="center">
-          <v-col class="grow">
-            欢迎使用            
-          </v-col>
-          <v-col class="shrink">
-            <v-btn text color="primary" @click="showTips=true">说明文档</v-btn>
+          <v-col class="grow" v-html="announcement">
           </v-col>
         </v-row>
       </v-alert>
@@ -57,11 +51,12 @@
 
         <v-btn
           block
-          class="my-4"
+          class="mb-4"
           @click="submit()"
           @keyup.enter.native="submit"
           depressed
           color="primary"
+          large
         >
           生成
         </v-btn>
@@ -116,7 +111,8 @@ export default {
         alert: false,
       },
       dialog: false,
-      showTips:false
+      showTips:false,
+      announcement:"获取中...",
     };
   },
   mounted: function () {
@@ -149,6 +145,7 @@ export default {
           _this.TextItems = res.data.data.codeType;
           _this.VehicleItems = res.data.data.actualVehicle;
           _this.ExpTimeItems = res.data.data.expTime;
+          _this.announcement = res.data.data.announcement;
         } else {
           _this.error(res.data.msg);
         }
