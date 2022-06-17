@@ -63,6 +63,14 @@
               >
                 查看e码通页面
               </v-btn>
+              <v-btn
+                  text
+                  color="primary"
+                  :href="ecodeQrcodeUrl"
+                  target="_blank"
+              >
+                二维码页面
+              </v-btn>
               <v-btn text color="error" :to="deleteUrl"> 删除 </v-btn>
             </v-card-actions>
           </v-card>
@@ -286,6 +294,9 @@ export default {
     },
     shadowrocketUrl: function () {
       return this.oData.info.checkUrl + "/shadowrocket";
+    },
+    ecodeQrcodeUrl: function () {
+      return this.oData.info.checkUrl + "?_=1";
     },
   },
 };
