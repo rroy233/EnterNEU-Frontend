@@ -3,6 +3,7 @@
     <v-container>
       <v-alert
         type="success"
+        class="mx-3 mt-2"
         v-if="valid == 1"
         transition="scroll-y-transition"
       >
@@ -13,8 +14,8 @@
           </v-col>
         </v-row>
       </v-alert>
-      <v-alert type="info" v-if="valid == 0">加载中。。。</v-alert>
-      <v-alert type="error" v-if="valid == -1" transition="scroll-y-transition"
+      <v-alert type="info" class="mx-3 mt-2" v-if="valid == 0">加载中。。。</v-alert>
+      <v-alert type="error" class="mx-3 mt-2" v-if="valid == -1" transition="scroll-y-transition"
         >您的凭证无效或已过期</v-alert
       >
 
@@ -27,7 +28,11 @@
         <!-- 基本信息卡片 -->
         <v-col>
           <v-card>
-            <v-card-title>凭证信息</v-card-title>
+            <v-card-title>凭证信息
+              <v-spacer></v-spacer>
+              <v-btn text color="error" @click="deleteBtn=true" v-if="deleteBtn===false"><v-icon>mdi-delete</v-icon></v-btn>
+              <v-btn depressed color="error" v-if="deleteBtn===true" :to="deleteUrl"> 确定删除吗? </v-btn>
+            </v-card-title>
             <v-card-text>
               token：<code>{{ token }}</code
               >（获取信息的唯一凭证）<br />
@@ -57,11 +62,11 @@
             <v-card-actions>
               <v-btn
                 text
-                color="primary"
+                color="teal darken-2"
                 :href="oData.info.checkUrl"
                 target="_blank"
               >
-                查看e码通页面
+                通行许可页面
               </v-btn>
               <v-btn
                   text
@@ -71,7 +76,7 @@
               >
                 二维码页面
               </v-btn>
-              <v-btn text color="error" :to="deleteUrl"> 删除 </v-btn>
+
             </v-card-actions>
           </v-card>
         </v-col>
@@ -114,7 +119,7 @@
                 您的头像数据将经AES加密处理后存储于服务器上，便于您使用。<br />
                 放心，您的数据会按照您的设定进行定时删除。
               </div>
-              <p>允许格式：jpg和png（图片大小不宜过大）</p>
+              <p>允许格式：JPG、PNG（大小不超过1MB）</p>
 
               <v-card-actions>
                 <v-btn
@@ -213,12 +218,14 @@ export default {
         file: null,
       },
       showTips: false,
+      deleteBtn:false,
     };
   },
   mounted: function () {
     this.token = this.$route.params.token;
     this.key = this.$route.params.key;
     this.init();
+    this.deleteBtn = false;
   },
   methods: {
     init: function () {
@@ -254,13 +261,13 @@ export default {
       })
         .then(function (res) {
           if (res.data.status == 0) {
-            _this.upload.loading = false;
-            _this.reveal = false;
             _this.success("上传成功");
             _this.init();
           } else {
             _this.error(res.data.msg);
           }
+          _this.upload.loading = false;
+          _this.reveal = false;
         })
         .catch((err) => {
           _this.error(err);
