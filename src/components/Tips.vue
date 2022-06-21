@@ -62,6 +62,10 @@ export default {
           this.error(err);
         });
     },
+    error: function (text){
+      this.loading = false
+      this.markdown = "# 读取失败("+ text+")"
+    },
   },
   computed: {
     markdownToHtml() {
