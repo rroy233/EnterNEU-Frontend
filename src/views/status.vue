@@ -30,6 +30,7 @@
           <v-card>
             <v-card-title>凭证信息
               <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="switch_site" v-if="switch_site_data.enabled===true"><v-icon>mdi-swap-horizontal</v-icon></v-btn>
               <v-btn text color="error" @click="deleteBtn=true" v-if="deleteBtn===false"><v-icon>mdi-delete</v-icon></v-btn>
               <v-btn depressed color="error" v-if="deleteBtn===true" :to="deleteUrl"> 确定删除吗? </v-btn>
             </v-card-title>
@@ -219,6 +220,10 @@ export default {
       },
       showTips: false,
       deleteBtn:false,
+      switch_site_data:{
+        enabled:false,
+        url:""
+      },
     };
   },
   mounted: function () {
@@ -237,6 +242,8 @@ export default {
           if (res.data.status == 0) {
             this.valid = 1;
             this.oData = res.data.data;
+            this.switch_site_data.enabled = res.data.data.switch.enabled;
+            this.switch_site_data.url = res.data.data.switch.url;
           } else {
             this.valid = -1;
             this.error(res.data.msg);
@@ -245,6 +252,9 @@ export default {
         .catch((err) => {
           this.error(err);
         });
+    },
+    switch_site: function (){
+      window.location = this.switch_site_data.url+"/#"+this.$route.fullPath;
     },
     uploadImg: function () {
       var _this = this;
